@@ -6,3 +6,16 @@ You can use the default [rule base](https://github.com/pmd/pmd/blob/master/pmd-j
 
 ## Answer
 
+Vrai positif (devrait être résolu) :
+
+```sh
+$ pmd check ./src -R category/java/design.xml/SimplifyBooleanReturns
+./src/userguide/java/org/apache/commons/math4/userguide/genetics/HelloWorldExample.java:76:	SimplifyBooleanReturns:	This if statement can be replaced by `return {condition};`
+```
+
+Faux positif (devrait être ignoré) :
+
+```sh
+$ pmd check ./commons-math-core/ -R category/java/codestyle.xml/UnnecessaryLocalBeforeReturn
+./commons-math-core/src/main/java/org/apache/commons/math4/core/jdkmath/AccurateMath.java:1566:	UnnecessaryLocalBeforeReturn:	Consider simply returning the value vs storing it in local variable 'result'
+```
