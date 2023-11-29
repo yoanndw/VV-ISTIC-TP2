@@ -23,3 +23,32 @@ Use your rule with different projects and describe you findings below. See the [
 
 ## Answer
 
+Règle XML :
+
+```xml
+<rule name="ThreeOrMoreNestedIfs"
+      language="java"
+      message="Three or more nested if blocks"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+	<description>
+		More than 2 if blocks are nested
+	</description>
+	<priority>3</priority>
+
+	<properties>
+		<property name="version" value="3.1"/>
+		<property name="xpath">
+         	<value>
+<![CDATA[
+//IfStatement//IfStatement//IfStatement
+]]>
+		</value>
+      </property>
+   </properties>
+</rule>
+```
+
+```sh
+$ pmd check ./src -R ../../code/Exercise4/MyRuleset.xml
+./src/userguide/java/org/apache/commons/math4/userguide/genetics/Polygon.java:97:	ThreeOrMoreNestedIfs:	Three or more nested if blocks
+```
