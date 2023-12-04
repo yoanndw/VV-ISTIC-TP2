@@ -1,5 +1,6 @@
 package fr.istic.vv;
 
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,12 @@ import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 // This class visits a compilation unit and
 // prints all public enum, classes or interfaces along with their public methods
 public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
+    private PrintWriter out;
     private Set<String> getters = new HashSet<>();
+
+    public PublicElementsPrinter(PrintWriter out) {
+        this.out = out;
+    }
 
     private String fieldToGetter(String field) {
         StringBuilder getter = new StringBuilder("get").append(String.valueOf(field.charAt(0)).toUpperCase())
@@ -29,9 +35,10 @@ public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
         if (!declaration.isPublic())
             return;
 
+        this.out.flush();
         this.getters.clear();
 
-        System.out.println("Classe: " + declaration.getFullyQualifiedName().orElse("[Anonymous]"));
+        this.out.println("Classe: " + declaration.getFullyQualifiedName().orElse("[Anonymous]"));
 
         for (BodyDeclaration<?> field : declaration.getFields()) {
             field.accept(this, arg);
@@ -56,27 +63,29 @@ public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
     public void visit(MethodDeclaration declaration, Void arg) {
         if (!declaration.isPublic())
             return;
-        // System.out.println("  " + declaration.getDeclarationAsString(true, true));
+        // this.out.println("  " + declaration.getDeclarationAsString(true, true));
 
         String methodName = declaration.getNameAsString();
         if (methodName.startsWith("get")) {
-            // System.out.println("Getter found " + methodName);
+            // this.out.println("Getter found " + methodName);
             this.getters.add(methodName);
         }
     }
 
     @Override
     public void visit(FieldDeclaration fieldDeclaration, Void arg) {
-        // System.out.println("Var: " + fieldDeclaration);
+        // this.out.println("Var: " + fieldDeclaration);
         for (VariableDeclarator varDeclarator : fieldDeclaration.getVariables()) {
-            // System.out.println("Var declarator: " + varDeclarator.getNameAsString());
+            // this.out.println("Var declarator: " + varDeclarator.getNameAsString());
 
             String getter = this.fieldToGetter(varDeclarator.getNameAsString());
-            // System.out.println("Var: " + varDeclarator.getNameAsString() + ", " + getter);
+            // this.out.println("Var: " + varDeclarator.getNameAsString() + ", " + getter);
             if (!this.getters.contains(getter)) {
-                System.out.println("  " + varDeclarator.getNameAsString());
+                this.out.println("  " + varDeclarator.getNameAsString());
             }
         }
+
+        this.out.flush();
     }
 
 }
