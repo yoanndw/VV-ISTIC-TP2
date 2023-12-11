@@ -1,6 +1,8 @@
 package fr.istic.vv;
 
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -17,18 +19,26 @@ import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 // This class visits a compilation unit and
 // prints all public enum, classes or interfaces along with their public methods
 public class CyclomaticComplexityPrinter extends VoidVisitorWithDefaults<Void> {
+    PrintWriter out;
+    String currentClassName;
     int nbNodes, nbEdges, nbEndNodes;
+
+    public CyclomaticComplexityPrinter(PrintWriter out) {
+        this.out = out;
+    }
 
     @Override
     public void visit(CompilationUnit unit, Void arg) {
         for(TypeDeclaration<?> type : unit.getTypes()) {
             type.accept(this, null);
         }
+
+        out.flush();
     }
 
     @Override
     public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
-        System.out.println(declaration.getFullyQualifiedName().orElse("[Anonymous]"));
+        currentClassName = declaration.getFullyQualifiedName().orElse("[Anonymous]");
         for(MethodDeclaration method : declaration.getMethods()) {
             method.accept(this, arg);
         }
@@ -45,7 +55,8 @@ public class CyclomaticComplexityPrinter extends VoidVisitorWithDefaults<Void> {
         int cc = nbEdges - nbNodes + 2 * nbEndNodes;
 
         // System.out.println("  " + declaration.getNameAsString() + ": " + nbNodes + " nodes; " + nbEdges + " edges; " + nbEndNodes + " end nodes; " + "CC = " + cc);
-        System.out.println("  " + declaration.getNameAsString() + ": CC = " + cc);
+        String parameters = declaration.getParameters().stream().map(p -> p.toString()).collect(Collectors.joining("; "));
+        out.println(currentClassName + "," + declaration.getNameAsString() + "," + parameters + "," + cc);
     }
 
     public void visit(BlockStmt stmt, Void arg) {

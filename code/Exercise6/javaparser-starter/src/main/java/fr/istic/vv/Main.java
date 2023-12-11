@@ -10,14 +10,15 @@ import com.github.javaparser.utils.SourceRoot;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        if(args.length == 0) {
-            System.err.println("Should provide the path to the source code");
+        if(args.length != 2) {
+            System.err.println("Should provide the path to the source code and the output CSV path");
             System.exit(1);
         }
 
@@ -27,8 +28,11 @@ public class Main {
             System.exit(2);
         }
 
+        File outputFile = new File(args[1]);
+        outputFile.createNewFile();
+
         SourceRoot root = new SourceRoot(file.toPath());
-        CyclomaticComplexityPrinter printer = new CyclomaticComplexityPrinter();
+        CyclomaticComplexityPrinter printer = new CyclomaticComplexityPrinter(new PrintWriter(outputFile));
         root.parse("", (localPath, absolutePath, result) -> {
             result.ifSuccessful(unit -> unit.accept(printer, null));
             return SourceRoot.Callback.Result.DONT_SAVE;

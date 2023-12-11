@@ -11,7 +11,10 @@
             "mainClass": "fr.istic.vv.Main",
             "projectName": "javaparser-starter",
             // "args": ["/shared/cours/m2/vv/VV-ISTIC-TP2/exemples_java/commons-math/src"]
-            "args": ["/shared/cours/m2/vv/VV-ISTIC-TP2/exemples_java/commons-math/src/userguide/java/org/apache/commons/math4/userguide/"]
+            "args": [
+                "/shared/cours/m2/vv/VV-ISTIC-TP2/exemples_java/commons-math/src/userguide/java/org/apache/commons/math4/userguide/",
+                "commons-math_userguide.csv"
+            ]
         }
     ]
 }
