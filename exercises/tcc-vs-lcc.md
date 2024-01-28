@@ -1,3 +1,7 @@
+Yoann DEWILDE
+Enora DANILO
+M2 ILA - Groupe 1
+
 # TCC *vs* LCC
 
 Explain under which circumstances *Tight Class Cohesion* (TCC) and *Loose Class Cohesion* (LCC) metrics produce the same value for a given Java class. Build an example of such as class and include the code below or find one example in an open-source project from Github and include the link to the class below. Could LCC be lower than TCC for any given class? Explain.
@@ -45,4 +49,4 @@ class Point {
 
 ### LCC < TCC
 
-Il faut : `nombre de paires connectées < nombre de paires directement connectées`. Ce qui est impossible, donc LCC ne peut être inférieur à TCC.
+Il faut : `nombre de paires connectées < nombre de paires directement connectées`. Ce qui est impossible car les connexions directes comptées pour TCC seront forcément comptabilisées dans LCC, donc LCC ne peut être inférieur à TCC.
