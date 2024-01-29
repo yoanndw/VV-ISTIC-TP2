@@ -52,6 +52,8 @@ Règle XML :
 </rule>
 ```
 
+### Exemple
+
 ```sh
 $ pmd check ./src -R ../../code/Exercise4/MyRuleset.xml
 ./src/userguide/java/org/apache/commons/math4/userguide/genetics/Polygon.java:97:	ThreeOrMoreNestedIfs:	Three or more nested if blocks
@@ -61,10 +63,10 @@ $ pmd check ./src -R ../../code/Exercise4/MyRuleset.xml
 
 ```
 if (docId != null) {
-            final EntityManager em = EntityManagerService.provideEntityManager();
-            final Document document = em.find(Document.class, Integer.parseInt(docId));
-            if (document != null) {
-                if (selectedDocument == null) {
-                    selectedDocument = document;
-                }
+    final EntityManager em = EntityManagerService.provideEntityManager();
+    final Document document = em.find(Document.class, Integer.parseInt(docId));
+    if (document != null) {
+        if (selectedDocument == null) {
+            selectedDocument = document;
+        }
 ```
