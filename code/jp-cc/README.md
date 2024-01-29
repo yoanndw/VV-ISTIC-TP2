@@ -1,23 +1,10 @@
-package fr.istic.vv;
+# Code of your exercise
 
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.stream.Collectors;
+Put here all the code created for this exercise
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ForEachStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
+Visiteur qui calcule la complexité cyclomatique de toutes les méthodes :
 
-
-// This class visits a compilation unit and
-// prints all public enum, classes or interfaces along with their public methods
+```java
 public class CyclomaticComplexityPrinter extends VoidVisitorWithDefaults<Void> {
     PrintWriter out;
     String currentClassName;
@@ -80,3 +67,31 @@ public class CyclomaticComplexityPrinter extends VoidVisitorWithDefaults<Void> {
     }
 
 }
+```
+
+Méthode `main` appelant ce visiteur :
+
+```java
+public static void main(String[] args) throws IOException {
+    if(args.length != 2) {
+        System.err.println("Should provide the path to the source code and the output CSV path");
+        System.exit(1);
+    }
+
+    File file = new File(args[0]);
+    if(!file.exists() || !file.isDirectory() || !file.canRead()) {
+        System.err.println("Provide a path to an existing readable directory");
+        System.exit(2);
+    }
+
+    File outputFile = new File(args[1]);
+    outputFile.createNewFile();
+
+    SourceRoot root = new SourceRoot(file.toPath());
+    CyclomaticComplexityPrinter printer = new CyclomaticComplexityPrinter(new PrintWriter(outputFile));
+    root.parse("", (localPath, absolutePath, result) -> {
+        result.ifSuccessful(unit -> unit.accept(printer, null));
+        return SourceRoot.Callback.Result.DONT_SAVE;
+    });
+}
+```

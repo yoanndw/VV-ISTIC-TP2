@@ -8,8 +8,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 
-// This class visits a compilation unit and
-// prints all public enum, classes or interfaces along with their public methods
 public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
     private PrintWriter out;
     private Set<String> getters = new HashSet<>();
